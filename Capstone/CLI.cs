@@ -22,7 +22,7 @@ namespace Capstone
         /// <summary>
         /// Initializes the program interface
         /// </summary>
-        public void Run()       //  SHOULD CALL A MAIN MENU "WRAPPER METHOD"
+        public void Run()       //  SHOULD CALL A MAIN MENU "WRAPPER METHOD"?
         {
             PrintHeader();
             // Print the list of Parks
@@ -61,9 +61,9 @@ namespace Capstone
             Console.WriteLine(park.ToString());
             Console.WriteLine();
             Console.WriteLine("Choose an option");
-            Console.WriteLine("1) View Campgrounds");    // View Campgrounds in this park
-            Console.WriteLine("2) Search for Reservation");    //2) Search for Reservation in this park
-            Console.WriteLine("3) Return to Previous Screen");    // 3) Return to Previous Screen
+            Console.WriteLine("1) View Campgrounds");           // View Campgrounds in this park
+            Console.WriteLine("2) Search for Reservation");     //2) Search for Reservation in this park
+            Console.WriteLine("3) Return to Previous Screen");  // 3) Return to Previous Screen
 
 
 
@@ -81,8 +81,6 @@ namespace Capstone
         public Campground PrintParkMenu(Park chosenPark)
         {
             Console.Clear();
-            Console.WriteLine(CurrentPark.ToString());
-            Console.WriteLine();
             var campgrounds=campDAL.GetCampgrounds(chosenPark); // Get a list of campgrounds at the specified park
 
             //User can view campgrounds in park or search for availability in a specified date range
@@ -148,21 +146,28 @@ namespace Capstone
                 }              // Within the range of possible parks
                 if (choiceNum <= 0)
                 {
-                    while (choiceNum < 0)
+                    while (choiceNum <= 0)
                     {
                         Console.WriteLine("Try Again.");
                         choiceNum = GetInteger(Console.ReadLine());
                     }
                 }                               //  ""
-                Park infoPark = parks[choiceNum];
-               int infoChoice= GetParkInfo(infoPark);              // Prints Park info
+                Park infoPark = parks[choiceNum-1];
+               int infoChoice= GetParkInfo(infoPark);              // Prints Park info, asks for user to choose option & returns choice
 
                 switch (infoChoice)
                 {
+                    case 0:                         // 0) Return to Previous Screen
+                        break;
                     case 1:
+                        CurrentPark = infoPark;                // View Campgrounds in this park
+                        PrintParkMenu(CurrentPark);                       
+                        break;                                  
 
+                    case 2:                                      //2) Search for Reservation in this park
+                        break;
 
-
+                    
 
                     default:
                         break;
@@ -171,7 +176,7 @@ namespace Capstone
 
 
             }
-            return infoPark;
+            return new Park();
         }
 
         public static int GetInteger(string message)
@@ -200,9 +205,5 @@ namespace Capstone
             return intValue;
 
         }
-
-
-
     }
-
 }

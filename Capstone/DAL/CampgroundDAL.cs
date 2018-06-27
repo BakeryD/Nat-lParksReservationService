@@ -10,7 +10,6 @@ namespace Capstone.DAL
 {
    public class CampgroundDAL
     {
-
         private readonly string ConnectionString;
         /// <summary>
         /// Initializes the DAL class with the connection string for our database.

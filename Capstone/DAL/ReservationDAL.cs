@@ -8,8 +8,8 @@ using System.Data.SqlClient;
 
 namespace Capstone.DAL
 {
-   public class ReservationDAL
-    {
+	public class ReservationDAL
+	{
 		private readonly string ConnectionString;
 
 		/// <summary>
@@ -22,9 +22,9 @@ namespace Capstone.DAL
 		}
 
 		/// <summary>
-		/// Returns a list of reservatoins for a given site
+		/// Returns a list of reservations for a given site
 		/// </summary>
-		/// <param name="fromPark">The park to look in</param>
+		/// <param name="fromSite">The site to look in</param>
 		/// <returns></returns>
 		public IList<Reservation> GetReservations(Site fromSite)
 		{
@@ -56,7 +56,7 @@ namespace Capstone.DAL
 						reservation.FromDate = Convert.ToDateTime(reader["from_date"]);
 						reservation.ToDate = Convert.ToDateTime(reader["to_date"]);
 						reservation.CreatedDate = Convert.ToDateTime(reader["create_date"]);
-						
+
 						// Add it to the list
 						reservations.Add(reservation);
 					}
@@ -74,6 +74,43 @@ namespace Capstone.DAL
 			return reservations;
 		}
 
+		/// <summary>
+		/// Enters a new reservation into the database
+		/// </summary>
+		/// <param name="reservation">The reservation to enter</param>
+		/// <returns>The reservation Id or 0 if it fails</returns>
+		public int MakeReservation(Reservation reservation)
+		{
+			// Initialize output variable
+			int id = 0;
+			try
+			{
+				// Create new connection object
+				using (SqlConnection conn = new SqlConnection(ConnectionString))
+				{
+					// Open the conneciton
+					conn.Open();
+
+					// Create a command
+					string insert = $"INSERT INTO reservation (site_id, name, from_date, to_date) VALUES ({reservation.SiteId}, '{reservation.Name}', '{reservation.FromDate}', '{reservation.ToDate}');";
+					SqlCommand cmd = new SqlCommand(insert, conn);
+
+					// Execute the command
+					cmd.ExecuteNonQuery();
+
+					// Create a query to find the new reservation's id
+					string query = "SELECT MAX(reservation_id) FROM reservation;";
+					cmd.CommandText = query;
+					id = Convert.ToInt32(cmd.ExecuteScalar());
+				}
+			}
+			catch (SqlException ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+			// Return the new reservation's id or 0 if failed
+			return id;
+		}
 
 	}
 }
