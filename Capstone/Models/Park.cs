@@ -31,7 +31,7 @@ namespace Capstone.Models
 		/// <summary>
 		/// The area of the park in square km
 		/// </summary>
-		public double AreaInSqKm { get; set; }
+		public int AreaInSqKm { get; set; }
 
 		/// <summary>
 		/// The annual number of visitors to the park
