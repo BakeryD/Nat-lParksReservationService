@@ -22,6 +22,10 @@ namespace Capstone.DAL
             ConnectionString = connectString;
         }
 
+		/// <summary>
+		/// Gets a list of all of the parks
+		/// </summary>
+		/// <returns></returns>
 		public IList<Park> GetParks()
 		{
 			// Create a list to hold output
