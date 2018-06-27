@@ -9,5 +9,7 @@ namespace Capstone.DAL
 {
     class CampgroundDAL
     {
+
+
     }
 }
