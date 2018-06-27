@@ -39,7 +39,7 @@ namespace Capstone.DAL
 					conn.Open();
 
 					//Create query to get all campgrounds from the specified park
-					string sql = $"Select * From reservations Where reservations.site_id = {fromSite.SiteId};";
+					string sql = $"Select * From reservation Where reservation.site_id = {fromSite.SiteId};";
 					SqlCommand cmd = new SqlCommand(sql, conn);
 
 					//Execute Command
