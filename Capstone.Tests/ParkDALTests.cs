@@ -4,7 +4,7 @@ using System.IO;
 using System.Transactions;
 using Capstone.DAL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Capstone.Models;
 
 namespace Capstone.Tests
 {
