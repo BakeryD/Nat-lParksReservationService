@@ -21,9 +21,13 @@ namespace Capstone.DAL
             ConnectionString = connectString;
         }
 
-        public IList<>
+       // public IList<>
 
 
 
     }
+
+
+	
+
 }
