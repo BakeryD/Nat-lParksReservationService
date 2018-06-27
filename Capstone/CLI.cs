@@ -13,7 +13,8 @@ namespace Capstone
         private const string ConnectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=Campground;Integrated Security=True";
         private Park CurrentPark;
         private Campground CurrentGround;
-        private static ParkDAL parkDAL = new ParkDAL(ConnectionString); 
+        private static ParkDAL parkDAL = new ParkDAL(ConnectionString);
+        private static CampgroundDAL campDAL = new CampgroundDAL(ConnectionString);
 
 
 
@@ -25,14 +26,13 @@ namespace Capstone
         {
             PrintHeader();
             // Print the list of Parks
-           CurrentPark = PrintMainMenu();
-            if (CurrentPark==null)
+            CurrentPark = PrintMainMenu();
+            if (CurrentPark == null)
             {
                 return;
             } // If they quit, current park stays null and this ends the program
-           // Call print park menu based on user input
+              // Call print park menu based on user input
             PrintParkMenu(CurrentPark);                              // User gets park info and choice to view campgrounds or search for reservation
-           //   userChoice = Console.ReadLine().ToUpper();
 
             // call print campground menu based on user input
             //  PrintCampGroundMenu(userChoice);
@@ -45,22 +45,22 @@ namespace Capstone
         /// </summary>
         private void PrintHeader()
         {
-            Console.WriteLine();
+            Console.WriteLine("Welcome to the National Parks Reservation System!");
         }
 
-        public void PrintCampGroundMenu(string userChoice)
+        public void PrintCampGroundMenu(Campground campground)
         {
-            
+
         }
 
         public void PrintParkMenu(Park chosenPark)
         {
-            //CurrentPark.ToString();
+            Console.WriteLine(CurrentPark.ToString());
 
-
+            var campgrounds=campDAL.GetCampgrounds(chosenPark); // Get a list of campgrounds at the specified park
 
             //User can view campgrounds in park or search for availability in a specified date range
-          
+
 
 
 
@@ -72,15 +72,14 @@ namespace Capstone
         {
             Console.WriteLine("Available Parks");
             Console.WriteLine();
-                 // SQL time!
             //Call ParkDAL to get all the parks
             //Get a list of park objects from ParkDAL
-            IList<Park> parks= parkDAL.GetParks();
+            IList<Park> parks = parkDAL.GetParks();
 
             //Choice number displayed
             int menuOption = 1;
             foreach (var park in parks)
-            { 
+            {
                 Console.WriteLine($"{menuOption}) {park.Name}");
                 menuOption++;
             }
@@ -89,23 +88,21 @@ namespace Capstone
             Console.WriteLine();
 
             string userChoice = Console.ReadLine().ToUpper();       //User selects a park to get more info on
-            if (userChoice=="Q")                    //Quit option
+            if (userChoice == "Q")                    //Quit option
             {
                 return null;
             }
-
             var choiceNum = GetInteger(userChoice);     // If not quit, it needs to be a number
-
-             if (choiceNum > parks.Count-1)
-             {
-                while (choiceNum>parks.Count-1)
+            if (choiceNum > parks.Count - 1)
+            {
+                while (choiceNum > parks.Count - 1)
                 {
                     Console.WriteLine("Try Again.");
                     choiceNum = GetInteger(Console.ReadLine());
                 }
 
-             }              // Within the range of possible parks
-            if (choiceNum<0)
+            }              // Within the range of possible parks
+            if (choiceNum <= 0)
             {
                 while (choiceNum < 0)
                 {
@@ -113,11 +110,7 @@ namespace Capstone
                     choiceNum = GetInteger(Console.ReadLine());
                 }
             }                               //  ""
-
-
-            Park infoPark = parks[choiceNum];       
-
-
+            Park infoPark = parks[choiceNum];
             return infoPark;
         }
 
