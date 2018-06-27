@@ -32,7 +32,7 @@ namespace Capstone
                 return;
             } // If they quit, current park stays null and this ends the program
               // Call print park menu based on user input
-            PrintParkMenu(CurrentPark);                              // User gets park info and choice to view campgrounds or search for reservation
+           CurrentGround= PrintParkMenu(CurrentPark);                              // User gets park info and choice to view campgrounds or search for reservation
 
             // call print campground menu based on user input
             //  PrintCampGroundMenu(userChoice);
@@ -53,17 +53,37 @@ namespace Capstone
 
         }
 
-        public void PrintParkMenu(Park chosenPark)
+        /// <summary>
+        /// Displays a list of campgrounds at the specified park with options to select a site, search for availability, or quit.
+        /// </summary>
+        /// <param name="chosenPark">User selected park.</param>
+        public Campground PrintParkMenu(Park chosenPark)
         {
+            Console.Clear();
             Console.WriteLine(CurrentPark.ToString());
-
+            Console.WriteLine();
             var campgrounds=campDAL.GetCampgrounds(chosenPark); // Get a list of campgrounds at the specified park
 
             //User can view campgrounds in park or search for availability in a specified date range
+            Console.WriteLine($"Available Campgrounds in {chosenPark.Name}");
+            Console.WriteLine();
+            int option = 1;
+            foreach (var campground in campgrounds)
+            {
+                Console.WriteLine($"{option}) {campground.ToString()}");
+                option++;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Choose an option");
+            Console.WriteLine("0) Return to Main Menu");
+            Console.WriteLine("1) Book Reservation (Any Campground in Park)");
+            Console.WriteLine("2) View Available Reservations (By Campground)");
+
+            int userChoice = GetInteger(Console.ReadLine());
 
 
-
-
+            return campgrounds[0];
         }
         /// <summary>
         /// Displays a list of available parks with the option to get more info and returns the result
@@ -82,7 +102,7 @@ namespace Capstone
             {
                 Console.WriteLine($"{menuOption}) {park.Name}");
                 menuOption++;
-            }
+            }   //Display all of the parks
 
             Console.WriteLine("Q) Quit");
             Console.WriteLine();
