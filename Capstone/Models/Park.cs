@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Capstone.Models
 {
-    public class Park
-    {
+	public class Park
+	{
 		/// <summary>
 		/// The Park Id
 		/// </summary>
@@ -42,5 +42,30 @@ namespace Capstone.Models
 		/// The park's description
 		/// </summary>
 		public string Description { get; set; }
+
+		public override string ToString()
+		{
+			string output = this.Name + "\n";
+			output += "Location:".PadRight(18) + this.Location + "\n";
+			output += "Established:".PadRight(18) + this.EstablishDate.ToShortDateString() + "\n";
+			output += "Area:".PadRight(18) + this.AreaInSqKm.ToString("N") + " sq km\n";
+			output += "Annual Visitors:".PadRight(18) + this.Visitors.ToString("N") + "\n\n";
+
+			string[] descriptionWords = this.Description.Split(' ');
+			int lineLength = 85;
+			int linePosition = 0;
+			foreach (string word in descriptionWords)
+			{
+				if (linePosition + word.Length > lineLength)
+				{
+					output += "\n";
+					linePosition = 0;
+				}
+				linePosition += word.Length + 1;
+				output += word + " ";
+			}
+
+			return output;
+		}
 	}
 }

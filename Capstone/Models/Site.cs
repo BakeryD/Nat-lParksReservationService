@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Capstone.Models
 {
-    public class Site
-    {
+	public class Site
+	{
 		/// <summary>
 		/// The site Id
 		/// </summary>
@@ -42,5 +42,16 @@ namespace Capstone.Models
 		/// Whether the camp site is equipped with utilities hookup
 		/// </summary>
 		public bool Utilities { get; set; }
+
+		public override string ToString()
+		{
+			string output = this.Number.ToString().PadRight(15);
+			output += this.MaxOccupancy.ToString().PadRight(15);
+			output += (this.HandicapAccessible ? "Yes" : "No").ToString().PadRight(15);
+			output += (this.MaxRVLength > 0 ? this.MaxRVLength.ToString() : "N/A").PadRight(15);
+			output += (this.Utilities ? "Yes" : "N/A").ToString().PadRight(15);
+
+			return output;
+		}
 	}
 }
