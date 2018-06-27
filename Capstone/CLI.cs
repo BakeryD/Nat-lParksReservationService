@@ -8,37 +8,59 @@ namespace Capstone
 {
     public class CLI
     {
+        private const string ConnectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=Campground;Integrated Security=True";
+
         /// <summary>
-        /// Generates a menu and returns the user choice
+        /// Initializes the program interface
         /// </summary>
-        /// <param name="menuOptions">A list of strings compirsing the Menu options</param>
-        /// <param name="allowQuit">Whther to allow the user to quit the menu (returns "Q")</param>
-        /// <returns>A string containing the 1 indexed number corresponding to the menu option</returns>
-    }
-    public static string GenerateAMenu(List<string> menuOptions, bool allowQuit)
-    {
-        HashSet<string> validChoices = new HashSet<string>();
-        string input = "";
-
-        do
+        public void Run()
         {
-            Console.WriteLine();
-            for (int i = 1; i <= menuOptions.Count; i++)
-            {
-                validChoices.Add(i.ToString());
-                Console.WriteLine($"{i}. {menuOptions[i - 1]}");
-            }
-            if (allowQuit)
-            {
-                validChoices.Add("Q");
-                Console.Write("Q. Quit");
-            }
-            Console.Write("Pick an option: ");
-            input = Console.ReadLine().ToUpper();
-            Console.Clear();
-        } while (!validChoices.Contains(input));
+            PrintMainMenu();
 
-        return input;
+            // Accept User input
+            string userChoice = Console.ReadLine().ToUpper();
+
+            // Call print park menu based on user input
+            PrintParkMenu(userChoice);
+            userChoice = Console.ReadLine().ToUpper();
+
+            // call print campground menu based on user input
+            PrintCampGroundMenu(userChoice);
+
+
+        }
+
+        public void PrintCampGroundMenu(string userChoice)
+        {
+            
+        }
+
+        public void PrintParkMenu(string choice)
+        {
+          
+
+
+
+        }
+        /// <summary>
+        /// Displays a list of available parks with the option to get more info.
+        /// </summary>
+        public void PrintMainMenu()
+        {
+                                // SQL time!
+            //Call ParkDAL to get all the parks
+
+
+            //Create a list of park objects?
+
+            //Select * From Park
+
+
+
+
+        }
+
+
     }
 
 }
