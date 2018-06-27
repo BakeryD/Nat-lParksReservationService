@@ -12,7 +12,7 @@ CREATE DATABASE Campground;
 GO
 
 -- Switch to the Campgound Database
-USE Campground 
+USE Campground;
 GO
 
 

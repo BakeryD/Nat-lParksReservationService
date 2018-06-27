@@ -9,3 +9,7 @@ C:\Users\Daniel Stone\TeamExercises\c-module-2-capstone-team-6\Capstone\obj\Debu
 C:\Users\Daniel Stone\TeamExercises\c-module-2-capstone-team-6\Capstone\obj\Debug\Capstone.csproj.CoreCompileInputs.cache
 C:\Users\Daniel Stone\TeamExercises\c-module-2-capstone-team-6\Capstone\obj\Debug\Capstone.exe
 C:\Users\Daniel Stone\TeamExercises\c-module-2-capstone-team-6\Capstone\obj\Debug\Capstone.pdb
+C:\Users\Daniel Stone\TeamExercises\c-module-2-capstone-team-6\Capstone\bin\Debug\ParksDB.sql
+C:\Users\Daniel Stone\TeamExercises\c-module-2-capstone-team-6\Capstone\bin\Debug\Capstone.exe.config
+C:\Users\Daniel Stone\TeamExercises\c-module-2-capstone-team-6\Capstone\bin\Debug\Capstone.exe
+C:\Users\Daniel Stone\TeamExercises\c-module-2-capstone-team-6\Capstone\bin\Debug\Capstone.pdb
