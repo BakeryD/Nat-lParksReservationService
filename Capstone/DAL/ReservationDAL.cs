@@ -26,7 +26,7 @@ namespace Capstone.DAL
 		/// </summary>
 		/// <param name="fromPark">The park to look in</param>
 		/// <returns></returns>
-		public IList<Reservation> GetReservations(Park fromPark)
+		public List<Reservation> GetReservations(Park fromPark)
 		{
 			//Create an output list
 			List<Reservation> reservations = new List<Reservation>();
@@ -86,6 +86,7 @@ namespace Capstone.DAL
 		/// <returns>The reservation Id or 0 if it fails</returns>
 		public int MakeReservation(Reservation reservation)
 		{
+            
 			// Initialize output variable
 			int id = 0;
 			try
@@ -97,7 +98,7 @@ namespace Capstone.DAL
 					conn.Open();
 
 					// Create a command
-					string insert = $"INSERT INTO reservation (site_id, name, from_date, to_date) VALUES ({reservation.SiteId}, '{reservation.Name}', '{reservation.FromDate}', '{reservation.ToDate}');";
+					string insert = $"INSERT INTO reservation (site_id, name, from_date, to_date, create_date) VALUES ({reservation.SiteId}, '{reservation.Name}', '{reservation.FromDate}', '{reservation.ToDate}', '{DateTime.Now}');";
 					SqlCommand cmd = new SqlCommand(insert, conn);
 
 					// Execute the command

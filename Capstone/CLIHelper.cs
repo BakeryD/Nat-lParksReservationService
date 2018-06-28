@@ -88,5 +88,17 @@ namespace Capstone
 			// Return the number
 			return output;
 		}
-	}
+
+        public static string GetString()
+        {
+            string input = Console.ReadLine();
+
+            while (input == "")
+            {
+                Console.Write("Please enter a valid input: ");
+                input = Console.ReadLine();
+            }
+            return input;
+        }
+    }
 }
