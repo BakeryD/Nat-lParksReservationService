@@ -89,7 +89,7 @@ namespace Capstone.DAL
 					//Open connection to database
 					conn.Open();
 
-					//Create query to get all campgrounds from the specified park
+					//Create query to get all site from the specified campground
 					string sql = $"SELECT DISTINCT TOP 5  site.* FROM campground " +
 								 $"INNER JOIN site ON campground.campground_id = site.campground_id " +
 								 $"INNER JOIN reservation ON site.site_id = reservation.site_id " +
@@ -102,10 +102,10 @@ namespace Capstone.DAL
 					//Execute Command
 					SqlDataReader reader = cmd.ExecuteReader();
 
-					//Loop through the rows and create Campground Objects
+					//Loop through the rows and create site Objects
 					while (reader.Read())
 					{
-						// Create a new campground
+						// Create a new site
 						Site site = new Site();
 						site.SiteId = Convert.ToInt32(reader["site_id"]);
 						site.Number = Convert.ToInt32(reader["site_number"]);
@@ -139,10 +139,10 @@ namespace Capstone.DAL
 		/// <param name="endDate">The requested end date</param>
 		/// <param name="park">The requested park</param>
 		/// <returns></returns>
-		public IList<Site> FindAvailableSites(DateTime startDate, DateTime endDate, Park park)
+		public IList<SiteWithNamePrice> FindAvailableSites(DateTime startDate, DateTime endDate, Park park)
 		{
 			//Create an output list
-			List<Site> sites = new List<Site>();
+			List<SiteWithNamePrice> sites = new List<SiteWithNamePrice>();
 
 			try
 			{
@@ -151,9 +151,9 @@ namespace Capstone.DAL
 					//Open connection to database
 					conn.Open();
 
-					//Create query to get all campgrounds from the specified park
-					string sql = $"SELECT DISTINCT TOP 5  site.* FROM campground " +
-								 $"INNER JOIN park ON park.park_id = campground.park_id " +
+					//Create query to get all sites from the specified park
+					string sql = $"SELECT DISTINCT TOP 5  campground.name, site.*, campground.daily_fee FROM park " +
+								 $"INNER JOIN campground ON park.park_id = campground.park_id " +
 								 $"INNER JOIN site ON campground.campground_id = site.campground_id " +
 								 $"INNER JOIN reservation ON site.site_id = reservation.site_id " +
 								 $"WHERE campground.park_id = {park.ParkId} AND " +
@@ -166,11 +166,11 @@ namespace Capstone.DAL
 					//Execute Command
 					SqlDataReader reader = cmd.ExecuteReader();
 
-					//Loop through the rows and create Campground Objects
+					//Loop through the rows and create site Objects
 					while (reader.Read())
 					{
-						// Create a new campground
-						Site site = new Site();
+						// Create a new site
+						SiteWithNamePrice site = new SiteWithNamePrice();
 						site.SiteId = Convert.ToInt32(reader["site_id"]);
 						site.Number = Convert.ToInt32(reader["site_number"]);
 						site.CampgroundId = Convert.ToInt32(reader["campground_id"]);
@@ -178,6 +178,8 @@ namespace Capstone.DAL
 						site.HandicapAccessible = Convert.ToBoolean(reader["accessible"]);
 						site.MaxRVLength = Convert.ToInt32(reader["max_rv_length"]);
 						site.Utilities = Convert.ToBoolean(reader["utilities"]);
+						site.Name= Convert.ToString(reader["name"]);
+						site.DailyFee = Convert.ToDecimal(reader["daily_fee"]);
 
 						// Add it to the list
 						sites.Add(site);

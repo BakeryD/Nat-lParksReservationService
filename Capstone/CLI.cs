@@ -15,6 +15,7 @@ namespace Capstone
         private Campground CurrentGround;
         private static ParkDAL parkDAL = new ParkDAL(ConnectionString);
         private static CampgroundDAL campDAL = new CampgroundDAL(ConnectionString);
+        private static SiteDAL siteDAL = new SiteDAL(ConnectionString);
 
 
 
@@ -23,10 +24,7 @@ namespace Capstone
         /// Initializes the program interface
         /// </summary>
         public void Run()       //  SHOULD CALL A MAIN MENU "WRAPPER METHOD"?
-        {
-            PrintHeader();
-            Console.WriteLine();
-            // Print the list of Parks
+        {  // Print the list of Parks
             PrintMainMenu();
 
         }
@@ -67,7 +65,7 @@ namespace Capstone
         /// Displays a list of campgrounds at the specified park with options to select a site, search for availability, or quit.
         /// </summary>
         /// <param name="chosenPark">User selected park.</param>
-        public Campground PrintParkMenu(Park chosenPark)
+        public void PrintCampgroundOptions(Park chosenPark)
         {
             Console.Clear();
             var campgrounds=campDAL.GetCampgrounds(chosenPark); // Get a list of campgrounds at the specified park
@@ -89,12 +87,44 @@ namespace Capstone
             Console.WriteLine("2) View Available Reservations (By Campground)");
 
             int userChoice = GetInteger(Console.ReadLine());
+            while (true)
+            {
+                if (userChoice == 0)
+                {
+                    Console.Clear();
+                    return;
+                }
+                else if (userChoice == 1)
+                {
+                    Console.WriteLine();
+                    Console.Write(">Enter a Start Date for Reservation:  ");
+                    var reservationStart = CLIHelper.GetDateTime(DateTime.Now.Date);
+                    Console.Write(">Enter a Departure Date for Reservation:  ");
+                    var reservationEnd = CLIHelper.GetDateTime(reservationStart);
+                    siteDAL.FindAvailableSites(reservationStart, reservationEnd, CurrentGround);
+
+                }
+                else if (userChoice == 2)
+                {
+                    Console.WriteLine();
+                    Console.Write("Which Campground would you like to view sites in? ");
+                   CurrentGround= campgrounds[ CLIHelper.GetAnInteger(1, campgrounds.Count)];
+                    Console.WriteLine();
+                    Console.Write(">Enter a Start Date for Reservation:  ");
+                    var reservationStart = CLIHelper.GetDateTime(DateTime.Today);
+                    Console.Write(">Enter a Departure Date for Reservation:  ");
+                    var reservationEnd = CLIHelper.GetDateTime(reservationStart);
 
 
 
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Input.");
+                }
 
-
-            return campgrounds[0];
+                }
+            return;
         }
         /// <summary>
         /// Displays a list of available parks with the option to get more info and returns the result
@@ -104,6 +134,8 @@ namespace Capstone
             bool viewMenu = true;
             while (viewMenu)
             {
+                PrintHeader();
+                Console.WriteLine();
                 Console.WriteLine("Parks");
                 Console.WriteLine();
                 //Call ParkDAL to get all the parks
@@ -150,12 +182,12 @@ namespace Capstone
 
                 switch (infoChoice)
                 {
-                    case 0:  
-                        // 0) Return to Previous Screen
+                    case 3:  
+                                 // 3) Return to Previous Screen
                         break;
                     case 1:
                         CurrentPark = infoPark;                // View Campgrounds in this park
-                        PrintParkMenu(CurrentPark);                       
+                        PrintCampgroundOptions(CurrentPark);                       
                         break;                                  
 
                     case 2:                                      //2) Search for Reservation in this park
@@ -166,13 +198,9 @@ namespace Capstone
                     default:
                         break;
                 }
-
-
-
             }
             return;
         }
-
         public static int GetInteger(string message)
         {
             string userInput = message;
