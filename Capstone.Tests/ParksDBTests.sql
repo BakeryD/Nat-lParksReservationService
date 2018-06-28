@@ -18,7 +18,9 @@ SET identity_insert park OFF;
 SET identity_insert campground ON;
 INSERT INTO campground (campground_id, park_id, name, open_from_mm, open_to_mm, daily_fee) VALUES (1, 1, 'Blackwoods', 1, 12, 35.00);
 INSERT INTO campground (campground_id, park_id, name, open_from_mm, open_to_mm, daily_fee) VALUES (2, 1, 'Seawall', 5, 9, 30.00);
+
 INSERT INTO campground (campground_id, park_id, name, open_from_mm, open_to_mm, daily_fee) VALUES (3, 2, 'Juniper Group Site', 1, 12, 250.00);
+
 INSERT INTO campground (campground_id, park_id, name, open_from_mm, open_to_mm, daily_fee) VALUES (4, 3, 'The Unnamed Primitive Campsites', 5, 11, 20.00);
 SET identity_insert campground OFF;
 
@@ -27,7 +29,9 @@ SET identity_insert site ON;
 INSERT INTO site (site_id, site_number, campground_id) VALUES (1, 1, 1);
 INSERT INTO site (site_id, site_number, campground_id) VALUES (2, 2, 1);
 INSERT INTO site (site_id, site_number, campground_id) VALUES (3, 3, 2);
+
 INSERT INTO site (site_id, site_number, campground_id, utilities) VALUES (4, 4, 3, 1);
+
 INSERT INTO site (site_id, site_number, campground_id, accessible) VALUES (5, 5, 4, 1);
 INSERT INTO site (site_id, site_number, campground_id, accessible, utilities) VALUES (6, 6, 4, 1, 1);
 SET identity_insert site OFF;
@@ -40,8 +44,10 @@ INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALU
 INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALUES (4, 2,  'Cook Family Reservation',		'2018-06-22', '2018-06-24');
 INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALUES (5, 3,  'Gates Reservation',				'2018-05-20', '2018-05-30');
 INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALUES (6, 3,  'Satya Nedella',					'2018-06-20', '2018-06-30');
+
 INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALUES (7, 4,  'Scott Gutherie',				'2018-06-25', '2018-06-30');
 INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALUES (8, 4,  'Marisa Mayer',					'2018-06-20', '2018-06-24');
+
 INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALUES (9, 5,  'Beth Mooney',					'2018-05-20', '2018-05-23');
 INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALUES (10, 5, 'Bill Board',					'2018-06-20', '2018-06-30');
 INSERT INTO reservation (reservation_id, site_id, name, from_date, to_date) VALUES (11, 5, 'Bill Loney',					'2018-05-25', '2018-05-30');
