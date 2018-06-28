@@ -153,7 +153,7 @@ namespace Capstone.DAL
 
 					//Create query to get all campgrounds from the specified park
 					string sql = $"SELECT DISTINCT TOP 5  site.* FROM campground " +
-								 $"INNER JOIN campground ON park.park_id = campground.park_id " +
+								 $"INNER JOIN park ON park.park_id = campground.park_id " +
 								 $"INNER JOIN site ON campground.campground_id = site.campground_id " +
 								 $"INNER JOIN reservation ON site.site_id = reservation.site_id " +
 								 $"WHERE campground.park_id = {park.ParkId} AND " +
