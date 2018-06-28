@@ -37,5 +37,17 @@ namespace Capstone.Models
 		/// The date the reservation was created
 		/// </summary>
 		public DateTime CreatedDate { get; set; }
+
+		public override string ToString()
+		{
+			string output = this.ReservationId.ToString().PadRight(15);
+			output += this.SiteId.ToString().PadRight(15);
+			output += this.Name.PadRight(25);
+			output += this.FromDate.ToString("MM/dd/yyyy").PadRight(15);
+			output += this.ToDate.ToString("MM/dd/yyyy").PadRight(15);
+			output += this.CreatedDate.ToString("MM/dd/yyyy");
+
+			return output;
+		}
 	}
 }

@@ -22,11 +22,11 @@ namespace Capstone.DAL
 		}
 
 		/// <summary>
-		/// Returns a list of reservations for a given site
+		/// Returns a list of reservations for a given park in the next 30 Days
 		/// </summary>
-		/// <param name="fromSite">The site to look in</param>
+		/// <param name="fromPark">The park to look in</param>
 		/// <returns></returns>
-		public IList<Reservation> GetReservations(Site fromSite)
+		public IList<Reservation> GetReservations(Park fromPark)
 		{
 			//Create an output list
 			List<Reservation> reservations = new List<Reservation>();
@@ -39,7 +39,13 @@ namespace Capstone.DAL
 					conn.Open();
 
 					//Create query to get all campgrounds from the specified park
-					string sql = $"Select * From reservation Where reservation.site_id = {fromSite.SiteId};";
+					string sql = $"SELECT reservation.* FROM campground "+ 
+								 $"INNER JOIN site ON campground.campground_id = site.campground_id " +
+								 $"INNER JOIN reservation ON site.site_id = reservation.reservation_id " +
+								 $"WHERE campground.park_id = {fromPark.ParkId} " +
+								 $"AND reservation.from_date >= GETDATE() - 1 " +
+								 $"AND reservation.from_date <= GETDATE() + 30 " +
+								 $"ORDER BY reservation.from_date;";
 					SqlCommand cmd = new SqlCommand(sql, conn);
 
 					//Execute Command
@@ -64,7 +70,6 @@ namespace Capstone.DAL
 			}
 			catch (SqlException ex)
 			{
-
 				Console.WriteLine(ex.Message);
 			}
 			catch (Exception ex)
