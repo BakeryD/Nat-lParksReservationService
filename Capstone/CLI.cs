@@ -25,20 +25,9 @@ namespace Capstone
         public void Run()       //  SHOULD CALL A MAIN MENU "WRAPPER METHOD"?
         {
             PrintHeader();
+            Console.WriteLine();
             // Print the list of Parks
-            CurrentPark = PrintMainMenu();
-            GetParkInfo(CurrentPark);
-
-            if (CurrentPark == null)
-            {
-                return;
-            } // If they quit, current park stays null and this ends the program
-              // Call print park menu based on user input
-           CurrentGround= PrintParkMenu(CurrentPark);                              // User gets park info and choice to view campgrounds or search for reservation
-
-            // call print campground menu based on user input
-            //  PrintCampGroundMenu(userChoice);
-
+            PrintMainMenu();
 
         }
 
@@ -102,17 +91,20 @@ namespace Capstone
             int userChoice = GetInteger(Console.ReadLine());
 
 
+
+
+
             return campgrounds[0];
         }
         /// <summary>
         /// Displays a list of available parks with the option to get more info and returns the result
         /// </summary>
-        public Park PrintMainMenu()      // Make this return the chosen park
+        public void PrintMainMenu()     
         {
             bool viewMenu = true;
             while (viewMenu)
             {
-                Console.WriteLine("Available Parks");
+                Console.WriteLine("Parks");
                 Console.WriteLine();
                 //Call ParkDAL to get all the parks
                 //Get a list of park objects from ParkDAL
@@ -132,7 +124,8 @@ namespace Capstone
                 string userChoice = Console.ReadLine().ToUpper();       //User selects a park to get more info on
                 if (userChoice == "Q")                    //Quit option
                 {
-                    return null;
+                    viewMenu = false;
+                    return ;
                 }
                 var choiceNum = GetInteger(userChoice);     // If not quit, it needs to be a number
                 if (choiceNum > parks.Count - 1)
@@ -157,7 +150,8 @@ namespace Capstone
 
                 switch (infoChoice)
                 {
-                    case 0:                         // 0) Return to Previous Screen
+                    case 0:  
+                        // 0) Return to Previous Screen
                         break;
                     case 1:
                         CurrentPark = infoPark;                // View Campgrounds in this park
@@ -176,7 +170,7 @@ namespace Capstone
 
 
             }
-            return new Park();
+            return;
         }
 
         public static int GetInteger(string message)
