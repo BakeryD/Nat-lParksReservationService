@@ -186,7 +186,7 @@ namespace Capstone
         {
             Console.Clear();
 
-            List<Campground> campgrounds = new List<Campground>();
+            List<Campground> campgrounds = campDAL.GetCampgrounds(currentPark);
             int occupants = 1;
             bool isAccessible = false;
             int RVLength = 0;
@@ -197,7 +197,7 @@ namespace Capstone
             {
                 Console.Clear();
                 Console.WriteLine($"Campgrounds in {currentPark.Name}");
-                campgrounds = PrintCampgroundList(currentPark);
+                PrintCampgroundList(currentPark);
 
                 Console.Write("Which Campground (enter 0 to cancel)? ");
                 input = CLIHelper.GetAnInteger(0, campgrounds.Count);
@@ -238,7 +238,7 @@ namespace Capstone
 
         }
 
-        private List<Campground> PrintCampgroundList(Park currentPark)
+        private void PrintCampgroundList(Park currentPark)
         {
             List<Campground> campgrounds = campDAL.GetCampgrounds(currentPark);
             Console.WriteLine("     Name                  Open            Close        DailyFee");
@@ -247,7 +247,6 @@ namespace Capstone
                 Console.WriteLine($"#{i}   " + campgrounds[i - 1].ToString());
             }
             Console.WriteLine();
-            return campgrounds;
         }
 
         private void BookAReservation(DateTime reservationStart, DateTime reservationEnd, List<Campground> campgrounds, int occupants, bool isAccessible, int RVLength, bool hasUtilities)
