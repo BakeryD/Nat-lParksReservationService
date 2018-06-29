@@ -99,14 +99,14 @@ namespace Capstone
             List<Park> parks = parkDAL.GetParks();
 
             //Choice number displayed
-            for (int i = 1; i<= parks.Count; i++)
+            for (int i = 1; i <= parks.Count; i++)
             {
-                Console.WriteLine($" {i}) {parks[i-1].Name}");
+                Console.WriteLine($" {i}) {parks[i - 1].Name}");
             }
-            Console.WriteLine($" {parks.Count+1}) Quit");
+            Console.WriteLine($" {parks.Count + 1}) Quit");
             Console.WriteLine();
             Console.Write(">");
-            return CLIHelper.GetAnInteger(1, parks.Count+1);
+            return CLIHelper.GetAnInteger(1, parks.Count + 1);
         }
 
         private void ParkMenu(Park currentPark)
@@ -127,7 +127,7 @@ namespace Capstone
 
                 }
             } while (input != 3);
-            if (input==3)
+            if (input == 3)
             {
                 Console.Clear();
             }
@@ -184,7 +184,14 @@ namespace Capstone
 
         private void SearchForReservation(Park currentPark, bool fromWholePark)
         {
+            Console.Clear();
+
             List<Campground> campgrounds = new List<Campground>();
+            int occupants = 1;
+            bool isAccessible = false;
+            int RVLength = 0;
+            bool hasUtilities = false;
+
             int input = -1;
             if (!fromWholePark)
             {
@@ -201,16 +208,34 @@ namespace Capstone
                 DateTime reservationStart = CLIHelper.GetDateTime(DateTime.Now.Date);
                 Console.Write(">Enter a Departure Date for Reservation:  ");
                 DateTime reservationEnd = CLIHelper.GetDateTime(reservationStart);
+
+                Console.Write("Would you like to preform an Advanced Search? (Y/N):  ");
+                bool isAdvancedSearch = CLIHelper.GetBoolean();
+                if (isAdvancedSearch)
+                {
+                    Console.WriteLine();
+                    Console.Write("What Number of Occupants:  ");
+                    occupants = CLIHelper.GetAnInteger(1, 55);
+                    Console.Write("Wheelchair Accessible? (Y/N):  ");
+                    isAccessible = CLIHelper.GetBoolean();
+                    Console.Write("Maximum RV Length Required:  ");
+                    RVLength = CLIHelper.GetAnInteger(0, 35);
+                    Console.Write("Utilities Required? (Y/N):  ");
+                    hasUtilities = CLIHelper.GetBoolean();
+                }
+
+
                 if (fromWholePark)
                 {
-                    BookAReservation(reservationStart, reservationEnd, campgrounds);
+                    BookAReservation(reservationStart, reservationEnd, campgrounds, occupants, isAccessible, RVLength, hasUtilities);
                 }
                 else
                 {
-                    BookAReservation(reservationStart, reservationEnd, new List<Campground>() { campgrounds[input - 1] });
+                    BookAReservation(reservationStart, reservationEnd, new List<Campground>() { campgrounds[input - 1] }, occupants, isAccessible, RVLength, hasUtilities);
                 }
 
             }
+
         }
 
         private List<Campground> PrintCampgroundList(Park currentPark)
@@ -225,23 +250,23 @@ namespace Capstone
             return campgrounds;
         }
 
-        private void BookAReservation(DateTime reservationStart, DateTime reservationEnd, List<Campground> campgrounds)
+        private void BookAReservation(DateTime reservationStart, DateTime reservationEnd, List<Campground> campgrounds, int occupants, bool isAccessible, int RVLength, bool hasUtilities)
         {
-            List<Site> sites = PrintSiteList(reservationStart, reservationEnd, campgrounds);
+            List<Site> sites = PrintSiteList(reservationStart, reservationEnd, campgrounds, occupants, isAccessible, RVLength, hasUtilities);
             //if site list is empty, ask for new date, call print site list again until there are sites in the list
 
-            while (sites.Count == 0) 
+            while (sites.Count == 0)
             {
-                    Console.WriteLine("No Available Sites For That Date Range, Try Again.");
-                    Console.WriteLine();
-                    Console.Write(">Enter a Start Date for Reservation:  ");
-                    DateTime newStart = CLIHelper.GetDateTime(DateTime.Now.Date);
-                    Console.Write(">Enter a Departure Date for Reservation:  ");
-                    DateTime newEnd = CLIHelper.GetDateTime(newStart);
-                    sites = PrintSiteList(newStart, newEnd, campgrounds);
+                Console.WriteLine("No Available Sites For That Date Range, Try Again.");
+                Console.WriteLine();
+                Console.Write(">Enter a Start Date for Reservation:  ");
+                DateTime newStart = CLIHelper.GetDateTime(DateTime.Now.Date);
+                Console.Write(">Enter a Departure Date for Reservation:  ");
+                DateTime newEnd = CLIHelper.GetDateTime(newStart);
+                sites = PrintSiteList(newStart, newEnd, campgrounds, occupants, isAccessible, RVLength, hasUtilities);
 
-            } 
-            
+            }
+
 
             //else, as user to choose a site
             Console.WriteLine("Which site should be reserved (enter 0 to cancel) ");
@@ -267,9 +292,9 @@ namespace Capstone
             }
         }
 
-        private List<Site> PrintSiteList(DateTime start, DateTime end, List<Campground> campgrounds)
+        private List<Site> PrintSiteList(DateTime start, DateTime end, List<Campground> campgrounds, int occupants, bool isAccessible, int RVLength, bool hasUtilities)
         {
-            List<string> screenOutput = new List<string>(); 
+            List<string> screenOutput = new List<string>();
             List<Site> allSites = new List<Site>();
             int menuNumber = 1;
             string header = "Site No.    Max Occup.   Accessible?     Max RV Length        Utility     Cost";
@@ -281,7 +306,7 @@ namespace Capstone
 
             foreach (Campground campground in campgrounds)
             {
-                List<Site> sites = siteDAL.FindAvailableSites(start, end, campground);
+                List<Site> sites = siteDAL.FindAvailableSitesAdvanced(start, end, campground, occupants, isAccessible, RVLength, hasUtilities);
                 foreach (Site site in sites)
                 {
                     string line = site.ToString() + CLIHelper.GetTripTotal(start, end, campground.DailyFee).ToString("C");
@@ -292,23 +317,22 @@ namespace Capstone
                     }
                     line = $"{menuNumber})  " + line;
                     screenOutput.Add(line);
-                    //Console.WriteLine(line);
                     allSites.Add(site);
                     menuNumber++;
                 }
             }
-            if (screenOutput.Count>1)
+            if (screenOutput.Count > 1)
             {
                 foreach (string line in screenOutput)
                 {
                     Console.WriteLine(line);
                 }
             }
-            
+
             Console.WriteLine();
             return allSites;
         }
-         
+
         private static void ResizeAndExitWindow()
         {
             Console.WriteLine();

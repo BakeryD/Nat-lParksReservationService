@@ -131,8 +131,6 @@ namespace Capstone.DAL
 			}
 			return sites;
 		}
-<<<<<<< HEAD
-=======
 
 		/// <summary>
 		/// Returns a list of campsites that are available for the given date and time
@@ -203,6 +201,6 @@ namespace Capstone.DAL
 			}
 			return sites;
 		}
->>>>>>> 28b08edf75aa77a9e786a05d4bc6cf6a64e74051
+
 	}
 }
