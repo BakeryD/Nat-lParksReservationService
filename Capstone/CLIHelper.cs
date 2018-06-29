@@ -89,16 +89,32 @@ namespace Capstone
 			return output;
 		}
 
-        public static string GetString()
-        {
-            string input = Console.ReadLine();
+		public static string GetString()
+		{
+			string input = Console.ReadLine();
 
-            while (input == "")
-            {
-                Console.Write("Please enter a valid input: ");
-                input = Console.ReadLine();
-            }
-            return input;
-        }
-    }
+			while (input == "")
+			{
+				Console.Write("Please enter a valid input: ");
+				input = Console.ReadLine();
+			}
+			return input;
+		}
+
+		public static bool GetBoolean()
+		{
+			// Take input from the user
+			string input = Console.ReadLine();
+
+			// Check if the input is valid 
+			// Keep asking until the user puts in a valid input
+			while (input.ToUpper() != "Y" && input.ToUpper() != "N")
+			{
+				Console.Write($"Please enter y/n: ");
+				input = Console.ReadLine();
+			}
+
+			return input.ToUpper() == "Y";
+		}
+	}
 }
