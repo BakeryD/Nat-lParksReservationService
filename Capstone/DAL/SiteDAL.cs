@@ -26,7 +26,7 @@ namespace Capstone.DAL
 		/// </summary>
 		/// <param name="fromPark">The park to look in</param>
 		/// <returns></returns>
-		public IList<Site> GetSites(Campground fromCampground)
+		public List<Site> GetSites(Campground fromCampground)
 		{
 			//Create an output list
 			List<Site> sites = new List<Site>();
@@ -202,5 +202,6 @@ namespace Capstone.DAL
 			// Return the list of sites that matches the criteria
 			return sites;
 		}
+
 	}
 }

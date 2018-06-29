@@ -37,10 +37,10 @@ namespace Capstone.Models
 		/// The cost per night for any site in the campground
 		/// </summary>
 		public decimal DailyFee { get; set; }
-
+        
 		public override string ToString()
 		{
-			string output = this.Name.PadRight(20);
+			string output = this.Name.PadRight(32);
 			output += NumberToMonthName(this.OpenMonth).PadRight(10);
 			output += NumberToMonthName(this.CloseMonth).PadRight(10);
 			output += this.DailyFee.ToString("C");

@@ -45,11 +45,11 @@ namespace Capstone.Models
 
 		public override string ToString()
 		{
-			string output = this.Number.ToString().PadRight(15);
-			output += this.MaxOccupancy.ToString().PadRight(15);
-			output += (this.HandicapAccessible ? "Yes" : "No").ToString().PadRight(15);
+			string output = this.Number.ToString().PadRight(10);
+			output += this.MaxOccupancy.ToString().PadRight(12);
+			output += (this.HandicapAccessible ? "Yes" : "No").ToString().PadRight(13);
 			output += (this.MaxRVLength > 0 ? this.MaxRVLength.ToString() : "N/A").PadRight(15);
-			output += (this.Utilities ? "Yes" : "N/A").ToString().PadRight(15);
+			output += (this.Utilities ? "Yes" : "N/A").ToString().PadRight(9);
 
 			return output;
 		}
