@@ -157,7 +157,7 @@ namespace Capstone.DAL
 								 $"INNER JOIN reservation ON site.site_id = reservation.site_id " +
 								 $"WHERE site.campground_id = {campground.CampgroundId} AND campground.open_from_mm <= {startDate.Month} AND campground.open_to_mm >= {endDate.Month} AND" +
 								 $"((reservation.from_date < '{startDate.ToString("yyyy-MM-dd")}' AND reservation.to_date < '{endDate.ToString("yyyy-MM-dd")}') OR " +
-								 $"(reservation.from_date > '{startDate.ToString("yyyy-MM-dd")}' AND reservation.to_date > '{endDate.ToString("yyyy-MM-dd")}'));" +
+								 $"(reservation.from_date > '{startDate.ToString("yyyy-MM-dd")}' AND reservation.to_date > '{endDate.ToString("yyyy-MM-dd")}')) AND " +
 								 $"(site.accessible = @accessible OR site.accessible = 1) AND " +
 								 $"(site.utilities = @utilities OR site.utilities = 1) AND " +
 								 $"site.max_occupancy >= @occupants AND site.max_rv_length >= @rv_length;";
@@ -192,13 +192,14 @@ namespace Capstone.DAL
 			}
 			catch (SqlException ex)
 			{
-
 				Console.WriteLine(ex.Message);
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
 			}
+
+			// Return the list of sites that matches the criteria
 			return sites;
 		}
 	}
