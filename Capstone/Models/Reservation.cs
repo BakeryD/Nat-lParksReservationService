@@ -40,13 +40,12 @@ namespace Capstone.Models
 
 		public override string ToString()
 		{
-			string output = this.ReservationId.ToString().PadRight(15);
-			output += this.SiteId.ToString().PadRight(15);
-			output += this.Name.PadRight(25);
-			output += this.FromDate.ToString("MM/dd/yyyy").PadRight(15);
-			output += this.ToDate.ToString("MM/dd/yyyy").PadRight(15);
-			output += this.CreatedDate.ToString("MM/dd/yyyy");
-
+            string output = $"{this.ReservationId,-15}" +
+                $"{this.SiteId,-10}" +
+                $"{this.Name,-30}" +
+                $"{this.FromDate.ToString("MM/dd/yyyy"),-13}" +
+                $"{this.ToDate.ToString("MM/dd/yyyy"),-13}" +
+                $"{this.CreatedDate.ToString("MM/dd/yyyy"),-13}";
 			return output;
 		}
 	}
