@@ -56,7 +56,7 @@ namespace Capstone.Tests
 			SiteDAL site = new SiteDAL(ConnectionString);
 
 			// Act
-			var listOfReservations = site.FindAvailableSitesAdvanced(new DateTime(2018, 5, 10), new DateTime(2018, 5, 15), new Campground() { CampgroundId = campgroundID }, 6, true, 0, false);
+			var listOfReservations = site.FindAvailableSitesAdvanced(new DateTime(2019, 6, 10), new DateTime(2019, 6, 15), new Campground() { CampgroundId = campgroundID }, 6, true, 0, false);
 
 			// Assert
 			Assert.AreEqual(expectedOutput, listOfReservations.Count);

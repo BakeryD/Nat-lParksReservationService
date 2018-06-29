@@ -40,7 +40,7 @@ namespace Capstone.Models
         
 		public override string ToString()
 		{
-			string output = this.Name.PadRight(20);
+			string output = this.Name.PadRight(32);
 			output += NumberToMonthName(this.OpenMonth).PadRight(10);
 			output += NumberToMonthName(this.CloseMonth).PadRight(10);
 			output += this.DailyFee.ToString("C");

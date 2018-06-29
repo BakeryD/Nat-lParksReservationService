@@ -192,13 +192,14 @@ namespace Capstone.DAL
 			}
 			catch (SqlException ex)
 			{
-
 				Console.WriteLine(ex.Message);
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
 			}
+
+			// Return the list of sites that matches the criteria
 			return sites;
 		}
 

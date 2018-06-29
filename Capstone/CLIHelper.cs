@@ -52,7 +52,7 @@ namespace Capstone
 		public static decimal GetTripTotal(DateTime start, DateTime end, decimal dailyFee)
 		{
 			// Calculate the length of the stay
-			int lengthOfStay = (end - start).Days + 1;
+			int lengthOfStay = (end.Date - start.Date).Days + 1;
 			// Return the length of the stay times the daily fee
 			return lengthOfStay * dailyFee;
 		}
@@ -89,18 +89,29 @@ namespace Capstone
 			return output;
 		}
 
+		/// <summary>
+		/// Gets a non empty string from the user
+		/// </summary>
+		/// <returns></returns>
 		public static string GetString()
 		{
+			// Gets user input
 			string input = Console.ReadLine();
 
+			// If it's empty, keep asking for input
 			while (input == "")
 			{
 				Console.Write("Please enter a valid input: ");
 				input = Console.ReadLine();
 			}
+			// Return the user input
 			return input;
 		}
 
+		/// <summary>
+		/// Gets a boolean value from the user
+		/// </summary>
+		/// <returns></returns>
 		public static bool GetBoolean()
 		{
 			// Take input from the user
@@ -110,10 +121,11 @@ namespace Capstone
 			// Keep asking until the user puts in a valid input
 			while (input.ToUpper() != "Y" && input.ToUpper() != "N")
 			{
-				Console.Write($"Please enter y/n: ");
+				Console.Write($"Please enter Y/N: ");
 				input = Console.ReadLine();
 			}
 
+			// Return the user input as a boolean
 			return input.ToUpper() == "Y";
 		}
 	}
