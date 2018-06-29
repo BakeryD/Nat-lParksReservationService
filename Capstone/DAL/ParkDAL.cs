@@ -26,7 +26,7 @@ namespace Capstone.DAL
 		/// Gets a list of all of the parks
 		/// </summary>
 		/// <returns></returns>
-		public IList<Park> GetParks()
+		public List<Park> GetParks()
 		{
 			// Create a list to hold output
 			List<Park> parks = new List<Park>();

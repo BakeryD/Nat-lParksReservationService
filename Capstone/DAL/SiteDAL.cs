@@ -77,7 +77,7 @@ namespace Capstone.DAL
 		/// <param name="endDate">The requested end date</param>
 		/// <param name="campground">The requested campground</param>
 		/// <returns></returns>
-		public IList<Site> FindAvailableSites(DateTime startDate, DateTime endDate, Campground campground)
+		public List<Site> FindAvailableSites(DateTime startDate, DateTime endDate, Campground campground)
 		{
 			//Create an output list
 			List<Site> sites = new List<Site>();
@@ -139,7 +139,7 @@ namespace Capstone.DAL
 		/// <param name="endDate">The requested end date</param>
 		/// <param name="park">The requested park</param>
 		/// <returns></returns>
-		public IList<SiteWithNamePrice> FindAvailableSites(DateTime startDate, DateTime endDate, Park park)
+		public List<SiteWithNamePrice> FindAvailableSites(DateTime startDate, DateTime endDate, Park park)
 		{
 			//Create an output list
 			List<SiteWithNamePrice> sites = new List<SiteWithNamePrice>();
