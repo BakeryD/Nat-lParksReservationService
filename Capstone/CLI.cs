@@ -39,20 +39,20 @@ namespace Capstone
             Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(@"      ,-.----.                                 ");
-            Console.WriteLine(@"      \    /  \                           ,-.  ");
-            Console.WriteLine(@"      |   :    \                      ,--/ /|  ");
-            Console.WriteLine(@"      |   |  .\ :            __  ,-.,--. :/ |  ");
-            Console.WriteLine(@"      .   :  |: |          ,' ,'/ /|:  : ' /   ");
-            Console.WriteLine(@"      |   |   \ : ,--.--.  '  | |' ||  '  /    ");
-            Console.WriteLine(@"      |   : .   //       \ |  |   ,''  |  :    ");
-            Console.WriteLine(@"      ;   | |`-'.--.  .-. |'  :  /  |  |   \   ");
-            Console.WriteLine(@"      |   | ;    \__\/: . .|  | '   '  : |. \  ");
-            Console.WriteLine(@"      :   ' |    ,' .--.; |;  : |   |  | ' \ \ ");
-            Console.WriteLine(@"      :   : :   /  /  ,.  ||  , ;   '  : |--'  ");
-            Console.WriteLine(@"      |   | :  ;  :   .'   \---'    ;  |,'     ");
-            Console.WriteLine(@"      `---'.|  |  ,     .-./        '--'       ");
-            Console.WriteLine(@"        `---`   `--`---'                       ");
+            Console.WriteLine(@"            ,-.----.                                 ");
+            Console.WriteLine(@"            \    /  \                           ,-.  ");
+            Console.WriteLine(@"            |   :    \                      ,--/ /|  ");
+            Console.WriteLine(@"            |   |  .\ :            __  ,-.,--. :/ |  ");
+            Console.WriteLine(@"            .   :  |: |          ,' ,'/ /|:  : ' /   ");
+            Console.WriteLine(@"            |   |   \ : ,--.--.  '  | |' ||  '  /    ");
+            Console.WriteLine(@"            |   : .   //       \ |  |   ,''  |  :    ");
+            Console.WriteLine(@"            ;   | |`-'.--.  .-. |'  :  /  |  |   \   ");
+            Console.WriteLine(@"            |   | ;    \__\/: . .|  | '   '  : |. \  ");
+            Console.WriteLine(@"            :   ' |    ,' .--.; |;  : |   |  | ' \ \ ");
+            Console.WriteLine(@"            :   : :   /  /  ,.  ||  , ;   '  : |--'  ");
+            Console.WriteLine(@"            |   | :  ;  :   .'   \---'    ;  |,'     ");
+            Console.WriteLine(@"            `---'.|  |  ,     .-./        '--'       ");
+            Console.WriteLine(@"              `---`   `--`---'                       ");
             Console.WriteLine();
             Console.WriteLine();
             Console.Write("                             ");
@@ -63,6 +63,8 @@ namespace Capstone
                 Console.Write(letter);
                 System.Threading.Thread.Sleep(75);
             }
+            System.Threading.Thread.Sleep(100);
+
             Console.Clear();
 
         }
@@ -78,7 +80,7 @@ namespace Capstone
                 if (input == parks.Count + 1)
                 {
                     Console.Clear();
-                    Console.WriteLine("Have a Nice Day!");
+                    ResizeAndExitWindow();
                     return;
                 }
                 else
@@ -90,8 +92,7 @@ namespace Capstone
 
         private static int PrintMainMenu()
         {
-            Console.WriteLine();
-            Console.WriteLine("Pick a Park");
+            Console.WriteLine("Pick a Park to View");
             Console.WriteLine();
             //Call ParkDAL to get all the parks
             //Get a list of park objects from ParkDAL
@@ -100,14 +101,17 @@ namespace Capstone
             //Choice number displayed
             for (int i = 1; i<= parks.Count; i++)
             {
-                Console.WriteLine($"{i}) {parks[i-1].Name}");
+                Console.WriteLine($" {i}) {parks[i-1].Name}");
             }
-            Console.WriteLine($"{parks.Count+1}) Quit");
+            Console.WriteLine($" {parks.Count+1}) Quit");
+            Console.WriteLine();
+            Console.Write(">");
             return CLIHelper.GetAnInteger(1, parks.Count+1);
         }
 
         private void ParkMenu(Park currentPark)
         {
+            Console.Clear();
             int input;
             do
             {
@@ -123,6 +127,10 @@ namespace Capstone
 
                 }
             } while (input != 3);
+            if (input==3)
+            {
+                Console.Clear();
+            }
         }
 
         private static int PrintParkMenu(Park currentPark)
@@ -131,10 +139,11 @@ namespace Capstone
             Console.WriteLine(currentPark.ToString());
             Console.WriteLine();
             Console.WriteLine("Choose an option");
-            Console.WriteLine("1) View Campgrounds");           // View Campgrounds in this park
-            Console.WriteLine("2) Search for Reservation");     //2) Search for Reservation in this park
-            Console.WriteLine("3) Return to Previous Screen");  // 3) Return to Previous Screen
-
+            Console.WriteLine(" 1) View Campgrounds");           // View Campgrounds in this park
+            Console.WriteLine(" 2) Search for Reservation");     //2) Search for Reservation in this park
+            Console.WriteLine(" 3) Return to Previous Screen");  // 3) Return to Previous Screen
+            Console.WriteLine();
+            Console.Write(">");
 
 
             int userChoice = CLIHelper.GetAnInteger(1, 3);
@@ -145,6 +154,7 @@ namespace Capstone
 
         private void ViewCampGroundsMenu(Park currentPark)
         {
+            Console.Clear();
             int input;
             do
             {
@@ -154,6 +164,7 @@ namespace Capstone
                     case 1:
                         SearchForReservation(currentPark, false);
                         break;
+                        //ADD ADVANCED SEARCH OPTION
                 }
             } while (input != 2);
         }
@@ -164,6 +175,8 @@ namespace Capstone
             Console.WriteLine("Choose an option");
             Console.WriteLine("   1) Search for Available Reservation");
             Console.WriteLine("   2) Return to Previous Screen");
+            Console.WriteLine();
+            Console.Write("  >");
             int userChoice = CLIHelper.GetAnInteger(1, 2);
 
             return userChoice;
@@ -175,6 +188,8 @@ namespace Capstone
             int input = -1;
             if (!fromWholePark)
             {
+                Console.Clear();
+                Console.WriteLine($"Campgrounds in {currentPark.Name}");
                 campgrounds = PrintCampgroundList(currentPark);
 
                 Console.Write("Which Campground (enter 0 to cancel)? ");
@@ -213,7 +228,22 @@ namespace Capstone
         private void BookAReservation(DateTime reservationStart, DateTime reservationEnd, List<Campground> campgrounds)
         {
             List<Site> sites = PrintSiteList(reservationStart, reservationEnd, campgrounds);
+            //if site list is empty, ask for new date, call print site list again until there are sites in the list
 
+            while (sites.Count == 0) 
+            {
+                    Console.WriteLine("No Available Sites For That Date Range, Try Again.");
+                    Console.WriteLine();
+                    Console.Write(">Enter a Start Date for Reservation:  ");
+                    DateTime newStart = CLIHelper.GetDateTime(DateTime.Now.Date);
+                    Console.Write(">Enter a Departure Date for Reservation:  ");
+                    DateTime newEnd = CLIHelper.GetDateTime(newStart);
+                    sites = PrintSiteList(newStart, newEnd, campgrounds);
+
+            } 
+            
+
+            //else, as user to choose a site
             Console.WriteLine("Which site should be reserved (enter 0 to cancel) ");
             int input = CLIHelper.GetAnInteger(0, sites.Count);
 
@@ -239,6 +269,7 @@ namespace Capstone
 
         private List<Site> PrintSiteList(DateTime start, DateTime end, List<Campground> campgrounds)
         {
+            List<string> screenOutput = new List<string>(); 
             List<Site> allSites = new List<Site>();
             int menuNumber = 1;
             string header = "Site No.    Max Occup.   Accessible?     Max RV Length        Utility     Cost";
@@ -246,7 +277,7 @@ namespace Capstone
             {
                 header = "Campground".PadRight(10) + header;
             }
-            Console.WriteLine(header);
+            screenOutput.Add(header);
 
             foreach (Campground campground in campgrounds)
             {
@@ -260,13 +291,40 @@ namespace Capstone
                         line = campground.Name.PadRight(10) + line;
                     }
                     line = $"{menuNumber})  " + line;
-                    Console.WriteLine(line);
+                    screenOutput.Add(line);
+                    //Console.WriteLine(line);
                     allSites.Add(site);
                     menuNumber++;
                 }
             }
+            if (screenOutput.Count>1)
+            {
+                foreach (string line in screenOutput)
+                {
+                    Console.WriteLine(line);
+                }
+            }
+            
             Console.WriteLine();
             return allSites;
+        }
+         
+        private static void ResizeAndExitWindow()
+        {
+            Console.WriteLine();
+            Console.WriteLine("BYE-BYE :)");
+            System.Threading.Thread.Sleep(400);
+            Console.Beep(1307, 75);
+            Console.SetWindowSize(104, 24);
+            System.Threading.Thread.Sleep(400);
+            Console.Beep(1300, 75);
+            Console.SetWindowSize(52, 12);
+            System.Threading.Thread.Sleep(400);
+            Console.Beep(1107, 75);
+            Console.SetWindowSize(26, 6);
+            System.Threading.Thread.Sleep(400);
+            Console.Beep(907, 75);
+            Console.SetWindowSize(13, 3);
         }
     }
 }
