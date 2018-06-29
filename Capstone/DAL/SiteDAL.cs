@@ -137,32 +137,56 @@ namespace Capstone.DAL
 		/// </summary>
 		/// <param name="startDate">The requested start date</param>
 		/// <param name="endDate">The requested end date</param>
-		/// <param name="park">The requested park</param>
+		/// <param name="campground">The requested campground</param>
 		/// <returns></returns>
-		public List<SiteWithNamePrice> FindAvailableSites(DateTime startDate, DateTime endDate, Park park)
+		public List<Site> FindAvailableSitesAdvanced(DateTime startDate, DateTime endDate, Campground campground, int occupants, bool accessiblity, int RVLength, bool utilities)
 		{
 			//Create an output list
-			List<SiteWithNamePrice> sites = new List<SiteWithNamePrice>();
-			List<int> campgroundIds = new List<int>();
+			List<Site> sites = new List<Site>();
+
 			try
 			{
 				using (SqlConnection conn = new SqlConnection(ConnectionString))
 				{
 					//Open connection to database
 					conn.Open();
-					string sql = $"SELECT campground.campground_id FROM campground " +
-								 $"WHERE campground.park_id = {park.ParkId};";
 
+					//Create query to get all site from the specified campground
+					string sql = $"SELECT DISTINCT TOP 5  site.* FROM campground " +
+								 $"INNER JOIN site ON campground.campground_id = site.campground_id " +
+								 $"INNER JOIN reservation ON site.site_id = reservation.site_id " +
+								 $"WHERE site.campground_id = {campground.CampgroundId} AND campground.open_from_mm <= {startDate.Month} AND campground.open_to_mm >= {endDate.Month} AND" +
+								 $"((reservation.from_date < '{startDate.ToString("yyyy-MM-dd")}' AND reservation.to_date < '{endDate.ToString("yyyy-MM-dd")}') OR " +
+								 $"(reservation.from_date > '{startDate.ToString("yyyy-MM-dd")}' AND reservation.to_date > '{endDate.ToString("yyyy-MM-dd")}'));" +
+								 $"(site.accessible = @accessible OR site.accessible = 1) AND " +
+								 $"(site.utilities = @utilities OR site.utilities = 1) AND " +
+								 $"site.max_occupancy >= @occupants AND site.max_rv_length >= @rv_length;";
 					SqlCommand cmd = new SqlCommand(sql, conn);
+
+					// Assign specified parameters as variables
+					cmd.Parameters.AddWithValue("@accessible", accessiblity);
+					cmd.Parameters.AddWithValue("@utilities", utilities);
+					cmd.Parameters.AddWithValue("@occupants", occupants);
+					cmd.Parameters.AddWithValue("@rv_length", RVLength);
 
 					//Execute Command
 					SqlDataReader reader = cmd.ExecuteReader();
 
-					// Create a list of campsite Ids in the park
-
+					//Loop through the rows and create site Objects
 					while (reader.Read())
 					{
-						campgroundIds.Add(Convert.ToInt32(reader["campground_id"]));
+						// Create a new site
+						Site site = new Site();
+						site.SiteId = Convert.ToInt32(reader["site_id"]);
+						site.Number = Convert.ToInt32(reader["site_number"]);
+						site.CampgroundId = Convert.ToInt32(reader["campground_id"]);
+						site.MaxOccupancy = Convert.ToInt32(reader["max_occupancy"]);
+						site.HandicapAccessible = Convert.ToBoolean(reader["accessible"]);
+						site.MaxRVLength = Convert.ToInt32(reader["max_rv_length"]);
+						site.Utilities = Convert.ToBoolean(reader["utilities"]);
+
+						// Add it to the list
+						sites.Add(site);
 					}
 				}
 			}
@@ -175,62 +199,6 @@ namespace Capstone.DAL
 			{
 				Console.WriteLine(ex.Message);
 			}
-
-			try
-			{
-				using (SqlConnection conn = new SqlConnection(ConnectionString))
-				{
-					//Open connection to database
-					conn.Open();
-
-					// For each campground in the park, get the top 5 sites
-					foreach (int campId in campgroundIds)
-					{
-						//Create query to get all sites from the specified campground
-						string sql = $"SELECT DISTINCT TOP 5  campground.name, site.*, campground.daily_fee FROM park " +
-									 $"INNER JOIN campground ON park.park_id = campground.park_id " +
-									 $"INNER JOIN site ON campground.campground_id = site.campground_id " +
-									 $"INNER JOIN reservation ON site.site_id = reservation.site_id " +
-									 $"WHERE site.campground_id = {campId} AND " +
-									 $"campground.open_from_mm <= {startDate.Month} AND campground.open_to_mm >= {endDate.Month} AND" +
-									 $"((reservation.from_date < '{startDate.ToString("yyyy-MM-dd")}' AND reservation.to_date < '{endDate.ToString("yyyy-MM-dd")}') OR " +
-									 $"(reservation.from_date > '{startDate.ToString("yyyy-MM-dd")}' AND reservation.to_date > '{endDate.ToString("yyyy-MM-dd")}'));";
-
-						SqlCommand cmd = new SqlCommand(sql, conn);
-
-						//Execute Command
-						SqlDataReader reader = cmd.ExecuteReader();
-
-						//Loop through the rows and create site Objects
-						while (reader.Read())
-						{
-							// Create a new site
-							SiteWithNamePrice site = new SiteWithNamePrice();
-							site.SiteId = Convert.ToInt32(reader["site_id"]);
-							site.Number = Convert.ToInt32(reader["site_number"]);
-							site.CampgroundId = Convert.ToInt32(reader["campground_id"]);
-							site.MaxOccupancy = Convert.ToInt32(reader["max_occupancy"]);
-							site.HandicapAccessible = Convert.ToBoolean(reader["accessible"]);
-							site.MaxRVLength = Convert.ToInt32(reader["max_rv_length"]);
-							site.Utilities = Convert.ToBoolean(reader["utilities"]);
-							site.Name = Convert.ToString(reader["name"]);
-							site.DailyFee = Convert.ToDecimal(reader["daily_fee"]);
-
-							// Add it to the list
-							sites.Add(site);
-						}
-					}
-				}
-			}
-			catch (SqlException ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-			// Return the list of available sites
 			return sites;
 		}
 	}

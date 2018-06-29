@@ -33,7 +33,7 @@ namespace Capstone.Tests
 		[DataRow(2, 0)]
 		[DataRow(3, 1)]
 		[DataRow(4, 0)]
-		public void FindAvailableSites_Campground(int campgroundID, int expectedOutput)
+		public void FindAvailableSites(int campgroundID, int expectedOutput)
 		{
 			// Arrange
 			SiteDAL site = new SiteDAL(ConnectionString);
@@ -46,16 +46,17 @@ namespace Capstone.Tests
 		}
 
 		[DataTestMethod]
-		[DataRow(1, 2)]
-		[DataRow(2, 1)]
+		[DataRow(1, 0)]
+		[DataRow(2, 0)]
 		[DataRow(3, 0)]
-		public void FindAvailableSites_Parks(int parkId, int expectedOutput)
+		[DataRow(4, 2)]
+		public void FindAvailableSitesAdvanced(int campgroundID, int expectedOutput)
 		{
 			// Arrange
 			SiteDAL site = new SiteDAL(ConnectionString);
 
 			// Act
-			var listOfReservations = site.FindAvailableSites(new DateTime(2018, 4, 25), new DateTime(2018, 6, 19), new Park() { ParkId = parkId });
+			var listOfReservations = site.FindAvailableSitesAdvanced(new DateTime(2018, 5, 10), new DateTime(2018, 5, 15), new Campground() { CampgroundId = campgroundID }, 6, true, 0, false);
 
 			// Assert
 			Assert.AreEqual(expectedOutput, listOfReservations.Count);
