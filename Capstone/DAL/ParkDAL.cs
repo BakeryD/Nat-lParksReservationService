@@ -68,6 +68,10 @@ namespace Capstone.DAL
 			{
 				Console.WriteLine(ex.Message);
 			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
 
 			// Return the output list
 			return parks;

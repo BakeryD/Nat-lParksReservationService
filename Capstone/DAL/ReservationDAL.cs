@@ -23,10 +23,12 @@ namespace Capstone.DAL
 
 		/// <summary>
 		/// Returns a list of reservations for a given park in the next 30 Days
+		/// Or the current campers
 		/// </summary>
 		/// <param name="fromPark">The park to look in</param>
+		/// <param name="current">Display the current campers if true, the next 30 days if false</param>
 		/// <returns></returns>
-		public List<Reservation> GetReservations(Park fromPark)
+		public List<Reservation> GetReservations(Park fromPark, bool current)
 		{
 			//Create an output list
 			List<Reservation> reservations = new List<Reservation>();
@@ -39,13 +41,22 @@ namespace Capstone.DAL
 					conn.Open();
 
 					//Create query to get all campgrounds from the specified park
-					string sql = $"SELECT reservation.* FROM campground "+ 
+					string sql = $"SELECT reservation.* FROM campground " +
 								 $"INNER JOIN site ON campground.campground_id = site.campground_id " +
 								 $"INNER JOIN reservation ON site.site_id = reservation.reservation_id " +
-								 $"WHERE campground.park_id = {fromPark.ParkId} " +
-								 $"AND reservation.from_date >= GETDATE() - 1 " +
-								 $"AND reservation.from_date <= GETDATE() + 30 " +
-								 $"ORDER BY reservation.from_date;";
+								 $"WHERE campground.park_id = {fromPark.ParkId} ";
+					if (current)
+					{
+						sql += $"AND reservation.from_date <= GETDATE()" +
+							   $"AND reservation.to_date >= GETDATE() ";
+					}
+					else
+					{
+						sql += $"AND reservation.from_date >= GETDATE() - 1 " +
+							   $"AND reservation.from_date <= GETDATE() + 30 ";
+					}
+
+					sql += $"ORDER BY reservation.from_date;";
 					SqlCommand cmd = new SqlCommand(sql, conn);
 
 					//Execute Command
@@ -86,7 +97,7 @@ namespace Capstone.DAL
 		/// <returns>The reservation Id or 0 if it fails</returns>
 		public int MakeReservation(Reservation reservation)
 		{
-            
+
 			// Initialize output variable
 			int id = 0;
 			try
@@ -117,6 +128,5 @@ namespace Capstone.DAL
 			// Return the new reservation's id or 0 if failed
 			return id;
 		}
-
 	}
 }
