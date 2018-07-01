@@ -41,9 +41,9 @@ namespace Capstone.DAL
 					conn.Open();
 
 					//Create query to get all campgrounds from the specified park
-					string sql = $"SELECT reservation.* FROM campground " +
-								 $"INNER JOIN site ON campground.campground_id = site.campground_id " +
-								 $"INNER JOIN reservation ON site.site_id = reservation.reservation_id " +
+					string sql = $"SELECT reservation.* FROM reservation " +
+                                 $"INNER JOIN site ON site.site_id = reservation.site_id " +
+                                 $"INNER JOIN campground ON campground.campground_id = site.campground_id " +
 								 $"WHERE campground.park_id = {fromPark.ParkId} ";
 					if (current)
 					{
@@ -62,10 +62,10 @@ namespace Capstone.DAL
 					//Execute Command
 					SqlDataReader reader = cmd.ExecuteReader();
 
-					//Loop through the rows and create Campground Objects
+					//Loop through the rows and create Reservation Objects
 					while (reader.Read())
 					{
-						// Create a new campground
+						// Create a new reservation
 						Reservation reservation = new Reservation();
 						reservation.ReservationId = Convert.ToInt32(reader["reservation_id"]);
 						reservation.SiteId = Convert.ToInt32(reader["site_id"]);
@@ -109,11 +109,16 @@ namespace Capstone.DAL
 					conn.Open();
 
 					// Create a command
-					string insert = $"INSERT INTO reservation (site_id, name, from_date, to_date, create_date) VALUES ({reservation.SiteId}, '{reservation.Name}', '{reservation.FromDate}', '{reservation.ToDate}', '{DateTime.Now}');";
+					string insert = $"INSERT INTO reservation (site_id, name, from_date, to_date, create_date) VALUES (@SiteID, @ResName, @FromWhen, @ToWhen, '{DateTime.Now}');";
 					SqlCommand cmd = new SqlCommand(insert, conn);
+                    cmd.Parameters.AddWithValue("@SiteID", reservation.SiteId);
+                    cmd.Parameters.AddWithValue("@ResName", reservation.Name);
+                    cmd.Parameters.AddWithValue("@FromWhen", reservation.FromDate);
+                    cmd.Parameters.AddWithValue("@ToWhen", reservation.ToDate);
 
-					// Execute the command
-					cmd.ExecuteNonQuery();
+
+                    // Execute the command
+                    cmd.ExecuteNonQuery();
 
 					// Create a query to find the new reservation's id
 					string query = "SELECT MAX(reservation_id) FROM reservation;";
