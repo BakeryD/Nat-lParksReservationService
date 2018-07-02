@@ -214,7 +214,7 @@ namespace Capstone
 			}
 
 			Console.WriteLine();
-			Console.Write("Press Any Key To Continue");
+			Console.Write("Press Any Key To Continue ");
 			Console.ReadKey(true);
 		}
 
@@ -240,7 +240,7 @@ namespace Capstone
 			}
 
 			Console.WriteLine();
-			Console.Write("Press Any Key To Continue");
+			Console.Write("Press Any Key To Continue ");
 			Console.ReadKey(true);
 		}
 
